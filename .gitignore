@@ -1,0 +1,11 @@
+# PyCache
+*.pyc
+
+# venv
+*env
+*Pipfile
+*Pipfile.lock
+
+# IDE
+*.vscode
+*.idea
