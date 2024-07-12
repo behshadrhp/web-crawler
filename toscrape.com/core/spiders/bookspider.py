@@ -12,9 +12,9 @@ class BookspiderSpider(scrapy.Spider):
 
         for book in books:
             yield{
-                "title": response.css("h3 a::text").get(),
-                "price": response.css(".product_price .price_color::text").get(),
-                "url": response.css("h3 a").attrib["href"]
+                "title": book.css("h3 a::text").get(),
+                "price": book.css(".product_price .price_color::text").get(),
+                "url": book.css("h3 a").attrib["href"]
             }
         
         next_page = response.css("li.next a::attr(href)").get()
