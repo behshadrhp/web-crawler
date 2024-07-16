@@ -1,39 +1,43 @@
 import scrapy
 
-
 class MoodContemplativeSpiderSpider(scrapy.Spider):
     name = "mood_contemplative_spider"
     allowed_domains = ["songsara.net"]
     start_urls = ["https://songsara.net/mood/contemplative"]
 
     def parse(self, response):
-        
         # get all albums
         albums = response.css("section.posting")
 
         # process on data received
         for album in albums:
-            
-            # split data
-            cover_images = album.css("figure img::attr(src)").extract()
-            cover = cover_images[0] if len(cover_images) == 1 else cover_images[1]
-            # None or ...
-            genre_element = album.css("li.index-da a")
-            genre = genre_element.attrib["href"] if genre_element else None
-            artist_element = album.css("li.index-ar a")
-            artist = artist_element.attrib["href"] if artist_element else None
+            relative_url = album.css("div.post-img-hover a::attr(href)").get()
+            if relative_url is not None:
+                yield response.follow(relative_url, callback=self.parse_song)
 
-            yield{
-                "link": album.css("div.post-img-hover a").attrib["href"],
-                "cover": cover,
-                "type": album.css("span.TSale::text").get(),
-                "title": albums.css("li.index-al::text").get(),
-                "artist": artist,
-                "genre": genre,
-                "date": album.css("li.index-da::text").get(),
-            }
+        next_page_element = response.css("a.nextpostslink::attr(href)").get()
+        if next_page_element is not None:
+            yield response.follow(next_page_element, callback=self.parse)
+
+    def parse_song(self, response):
+        # get more information about song
+        song = response.css("article.postbox-single")
         
-        next_pate_element = response.css("a.nextpostslink")
-        next_page = response.css("a.nextpostslink").attrib["href"] if next_pate_element else None
-        if next_page is not None:
-            yield response.follow(next_page, callback=self.parse)
+        # Extract image URL from the first selector
+        image_url = song.css("img.attachment-pic-single::attr(src)").get()
+        
+        # Extract all songs url
+        songs_url = song.xpath("//ul[@class='audioplayer-audios']/li/@data-src").extract()
+        
+        # Check if the image URL is invalid and use the fallback selector if needed
+        if image_url and image_url.startswith("data:"):
+            image_url = song.css("figure.pic-s img.attachment-pic-single::attr(data-lazy-src)").get()
+
+        # clone data
+        yield {
+            "url": response.url,
+            "image": image_url,
+            "title": song.css("h2.AL-Si::text").get(),
+            "artist": song.css("div.AR-Si a::text").get(),
+            "songs": songs_url,
+        }
