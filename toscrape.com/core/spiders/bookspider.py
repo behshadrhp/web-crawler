@@ -1,5 +1,7 @@
 import scrapy
 
+from core.items import BookItem
+
 
 class BookspiderSpider(scrapy.Spider):
     name = "bookspider"
@@ -38,21 +40,22 @@ class BookspiderSpider(scrapy.Spider):
         # get data from ...
         book = response.css(".product_page")
         table_row = response.css("table tr")
+        book_item = BookItem()
         
         # clone data
-        yield{
-            "url": response.url,
-            "image": book.css("div.item img").attrib["src"],
-            "title": book.css("div.col-sm-6 h1::text").get(),
-            "category": book.xpath("//li[3]/a/text()").get(),
-            "stars": book.css("div.col-sm-6 p.star-rating ").attrib["class"],
-            "price": book.xpath("//p[@class='price_color']//text()").get(),
-            "upc": table_row[0].css("td::text").get(),
-            "product_type": table_row[1].css("td::text").get(),
-            "price_excl_tax": table_row[2].css("td::text").get(),
-            "price_incl_tax": table_row[3].css("td::text").get(),
-            "tax": table_row[4].css("td::text").get(),
-            "availability": table_row[5].css("td::text").get(),
-            "num_reviews": table_row[6].css("td::text").get(),
-            "description": book.xpath("//div[@id='product_description']/following-sibling::p/text()").get(),
-        }
+        book_item["url"] = response.url
+        book_item["image"] = book.css("div.item img").attrib["src"]
+        book_item["title"] = book.css("div.col-sm-6 h1::text").get()
+        book_item["category"] = book.xpath("//li[3]/a/text()").get()
+        book_item["stars"] = book.css("div.col-sm-6 p.star-rating ").attrib["class"]
+        book_item["price"] = book.xpath("//p[@class='price_color']//text()").get()
+        book_item["upc"]= table_row[0].css("td::text").get()
+        book_item["product_type"] = table_row[1].css("td::text").get()
+        book_item["price_excl_tax"] = table_row[2].css("td::text").get()
+        book_item["price_incl_tax"] = table_row[3].css("td::text").get()
+        book_item["tax"] = table_row[4].css("td::text").get()
+        book_item["availability"] = table_row[5].css("td::text").get()
+        book_item["num_reviews"] = table_row[6].css("td::text").get()
+        book_item["description"] = book.xpath("//div[@id='product_description']/following-sibling::p/text()").get()
+    
+        yield book_item
