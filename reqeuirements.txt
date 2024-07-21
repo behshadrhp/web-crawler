@@ -1,2 +1,5 @@
 scrapy
+mysql-connector-python
+mysqlclient
+mysql
 ipython
