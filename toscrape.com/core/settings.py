@@ -7,11 +7,17 @@ FEEDS = {
     "books_data.json": {"format": "json"}
 }
 
+# user-agent get api
+SCRAPEOPS_API_KEY = "c97f38b2-7d47-4da0-8566-36f1e99f7c85"
+SCRAPEOPS_FAKE_USER_AGENT_ENDPOINT = "https://headers.scrapeops.io/v1/user-agents"
+SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
+SCRAPEOPS_NUM_RESULTS = 50
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "core (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -44,9 +50,11 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
+DOWNLOADER_MIDDLEWARES = {
 #    "core.middlewares.CoreDownloaderMiddleware": 543,
-#}
+   "core.middlewares.ScrapeOPSFakeUserAgentMiddleware": 400,
+#    "core.middlewares.ScrapeOpsFakeBrowserHeaderAgentMiddleware": 400,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -58,7 +66,7 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    "core.pipelines.CorePipeline": 300,
-   "core.pipelines.SaveToMySQLPipeline": 400,
+#    "core.pipelines.SaveToMySQLPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
