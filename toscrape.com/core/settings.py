@@ -13,6 +13,14 @@ SCRAPEOPS_FAKE_USER_AGENT_ENDPOINT = "https://headers.scrapeops.io/v1/user-agent
 SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
 SCRAPEOPS_NUM_RESULTS = 50
 
+# proxy list
+ROTATING_PROXY_LIST = [
+    "45.94.36.191:8000",
+    "103.229.28.230:8000",
+    "45.152.203.147:8000",
+    "185.242.245.17:8000"
+]
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "core (+http://www.yourdomain.com)"
 
@@ -53,7 +61,9 @@ ROBOTSTXT_OBEY = False
 DOWNLOADER_MIDDLEWARES = {
 #    "core.middlewares.CoreDownloaderMiddleware": 543,
    "core.middlewares.ScrapeOPSFakeUserAgentMiddleware": 400,
-#    "core.middlewares.ScrapeOpsFakeBrowserHeaderAgentMiddleware": 400,
+#  "core.middlewares.ScrapeOpsFakeBrowserHeaderAgentMiddleware": 400,
+    "rotating_proxies.middlewares.RotatingProxyMiddleware": 610,
+    "rotating_proxies.middlewares.BanDetectionMiddleware": 620,
 }
 
 # Enable or disable extensions

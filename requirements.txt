@@ -1,4 +1,5 @@
 scrapy
+scrapy-rotating-proxies
 mysql-connector-python
 mysqlclient
 mysql
