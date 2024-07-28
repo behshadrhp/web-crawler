@@ -12,6 +12,10 @@ BOT_NAME = "divar"
 SPIDER_MODULES = ["divar.spiders"]
 NEWSPIDER_MODULE = "divar.spiders"
 
+FEEDS = {
+    "divar_apartment_data.json": {"format": "json"}
+}
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "divar (+http://www.yourdomain.com)"
