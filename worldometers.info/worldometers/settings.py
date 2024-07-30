@@ -12,6 +12,10 @@ BOT_NAME = "worldometers"
 SPIDER_MODULES = ["worldometers.spiders"]
 NEWSPIDER_MODULE = "worldometers.spiders"
 
+# save data
+FEEDS = {
+    "worldometers_data.json": {"format": "json"}
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "worldometers (+http://www.yourdomain.com)"
