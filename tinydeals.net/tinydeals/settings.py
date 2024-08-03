@@ -12,6 +12,10 @@ BOT_NAME = "tinydeals"
 SPIDER_MODULES = ["tinydeals.spiders"]
 NEWSPIDER_MODULE = "tinydeals.spiders"
 
+# save data
+FEEDS = {
+    "tinydeal_shop.json": {"format": "json"}
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "tinydeals (+http://www.yourdomain.com)"
