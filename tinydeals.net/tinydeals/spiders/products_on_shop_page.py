@@ -1,10 +1,19 @@
+from typing import Iterable
 import scrapy
 
 
 class ProductsOnShopPageSpider(scrapy.Spider):
     name = "products_on_shop_page"
     allowed_domains = ["www.tinydeals.net"]
-    start_urls = ["https://www.tinydeals.net/shop"]
+
+    def start_requests(self):
+        yield scrapy.Request(
+            url="https://www.tinydeals.net/shop",
+            callback=self.parse,
+            headers={
+                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/37.0.2062.94 Chrome/37.0.2062.94 Safari/537.36"
+            }
+        )
 
     def parse(self, response):
         """
@@ -31,4 +40,10 @@ class ProductsOnShopPageSpider(scrapy.Spider):
         next_page = response.xpath("//li/a[@class='next page-numbers']/@href").get()
 
         if next_page:
-            yield response.follow(url=next_page, callback=self.parse)
+            yield response.follow(
+                url=next_page, 
+                callback=self.parse,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/37.0.2062.94 Chrome/37.0.2062.94 Safari/537.36"
+                }
+            )
