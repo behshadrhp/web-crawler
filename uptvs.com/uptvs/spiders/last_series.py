@@ -14,22 +14,16 @@ class LastSeriesSpider(CrawlSpider):
 
     def parse_item(self, response):
 
-        # clean received data --> normalize
-        def clean_text(text):
-            if text:
-                return text.replace("\n", "").replace("\t", "").strip()
-            return text
-
-        title = clean_text(response.xpath("//div[@class='col-md col-12 text-md-right text-center']/h1/text()").get())
-        episode = clean_text(response.xpath("//div[@class='col-md col-12 text-md-right text-center']/span/text()").get())
-        genre = [ clean_text(g) for g in response.xpath("//div[@class='post-single-meta pt-lg-half pt-md-half mt-1 pb-10 small-14']/div/div/span/a/text()").getall()]
-        year_make = clean_text(response.xpath("//div[@class='row']/div[1]/text()[3]").get())
-        country_make = clean_text(response.xpath("//span[@class='d-md-inline-block d-none']/text()").get())
-        time_play = clean_text(response.xpath("//div[@class='row']/div[1]/text()[8]").get())
-        age_range = clean_text(response.xpath("//span[@class='text-yellow']/text()").get())
-        imdb_rating = clean_text(response.xpath("//span[@class='font-weight-bold text-white small-15']/text()").get())
-        imdb_count_rating = clean_text(response.xpath("//span[@class='text-gray d-lg-inline d-none small-12']/text()").get())
-        story = clean_text(response.xpath("//p[@class='show-read-more']/text()").get())
+        title = response.xpath("normalize-space(//div[@class='col-md col-12 text-md-right text-center']/h1/text())").get()
+        episode = response.xpath("normalize-space(//div[@class='col-md col-12 text-md-right text-center']/span/text())").get()
+        genre = response.xpath("normalize-space(//div[@class='post-single-meta pt-lg-half pt-md-half mt-1 pb-10 small-14']/div/div/span/a/text())").getall()
+        year_make = response.xpath("normalize-space(//div[@class='row']/div[1]/text()[3])").get()
+        country_make = response.xpath("normalize-space(//span[@class='d-md-inline-block d-none']/text())").get()
+        time_play = response.xpath("normalize-space(//div[@class='row']/div[1]/text()[8])").get()
+        age_range = response.xpath("normalize-space(//span[@class='text-yellow']/text())").get()
+        imdb_rating = response.xpath("normalize-space(//span[@class='font-weight-bold text-white small-15']/text())").get()
+        imdb_count_rating = response.xpath("normalize-space(//span[@class='text-gray d-lg-inline d-none small-12']/text())").get()
+        story = response.xpath("normalize-space(//p[@class='show-read-more']/text())").get()
 
         if genre[0] == "":
             genre.pop(0)
