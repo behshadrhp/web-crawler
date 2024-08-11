@@ -1,3 +1,4 @@
+selenium
 scrapy
 scrapy-rotating-proxies
 mysql-connector-python
