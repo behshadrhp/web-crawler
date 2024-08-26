@@ -22,3 +22,8 @@ class VideoTuterialsSpider(scrapy.Spider):
                 "info": info,
                 "page url": page_url
             }
+
+        next_page = response.xpath("//*[@id='us_grid_1']/nav/div/a[5]/@href").get()
+
+        if next_page is not None:
+            yield response.follow(next_page, callback=self.parse)
